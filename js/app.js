@@ -18,7 +18,7 @@
  * 
 */
 const DOMObj = {
-    mainSections: document.querySelectorAll("main section"),
+    mainSections: Array.from(document.querySelectorAll("main section")),
     navBarList: document.getElementById("navbar__list")
 }
 let currentActiveSection;
@@ -34,8 +34,7 @@ function navBuild() {
     //creating a document fragment for better 
     const el = document.createDocumentFragment();
     //loop over the sections available
-    for (let i = 0; i < DOMObj.mainSections.length; i++) {
-        const current = DOMObj.mainSections[i];
+    for (let current of DOMObj.mainSections) {
         //create the list item with the link inside it
         const child = document.createElement("li");
         child.innerHTML = `<a href="#${current.id}" class="menu__link"> ${current.dataset.nav} </a>`;
@@ -52,14 +51,12 @@ function isInView(el) {
 }
 //TODO: change the active status among sections
 function setActiveStatus() {
-    //create an array from the NodeList
-    const mainSectionsArr = Array.from(DOMObj.mainSections);
     if (!currentActiveSection) {
-        currentActiveSection = mainSectionsArr[0]
+        currentActiveSection = DOMObj.mainSections[0]
         currentActiveSection.classList.toggle("your-active-class")
     }
     //loop over the sections to change the currentActiveSection
-    for (let section of mainSectionsArr) {
+    for (const section of DOMObj.mainSections) {
         if (isInView(section) && !(section === currentActiveSection)) {
             currentActiveSection.classList.toggle("your-active-class")
             currentActiveSection = section;
@@ -68,14 +65,26 @@ function setActiveStatus() {
         }
     }
 }
-
-
+function scrollToSection(id) {
+    let el;
+    for (const section of DOMObj.mainSections) {
+        if (section.id === id) {
+            el = section;
+            break
+        }
+    }
+    window.scrollTo({
+        top: el.offsetTop,
+        behavior: "smooth"
+    })
+}
 /**
  * End Helper Functions
  * Begin Main Functions
  * 
 */
-function main() {
+function main(e) {
+    e.preventDefault();
     // build the nav
     navBuild();
 
@@ -83,7 +92,8 @@ function main() {
     setActiveStatus();
 
     // Scroll to anchor ID using scrollTO event
-
+    const id = window.location.hash.substr(1);
+    scrollToSection(id);
 }
 
 
@@ -96,7 +106,13 @@ function main() {
 // Build menu
 document.addEventListener("DOMContentLoaded", main)
 // Scroll to section on link click
-
+DOMObj.navBarList.addEventListener("click", (e) => {
+    if (e.target.tagName === "A" || e.target.tagName === "LI") {
+        e.preventDefault();
+        const id = e.target.hash.substr(1)
+        scrollToSection(id)
+    }
+})
 // Set sections as active
 document.addEventListener("scroll", setActiveStatus)
 
