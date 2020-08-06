@@ -12,7 +12,7 @@
  * JS Standard: ESlint
  * 
 */
-
+// All the code here is my own and any references are either from MDN or W3C website....Nothing was copied only references to some methods like ".getBoundingClientRect()"
 /**
  * Define Global Variables
  * 
@@ -37,7 +37,7 @@ const navBuild = () => {
     //creating a document fragment for better 
     const el = document.createDocumentFragment();
     //loop over the sections available
-    for (let current of DOMObj.mainSections) {
+    for (const current of DOMObj.mainSections) {
         //create the list item with the link inside it
         const child = document.createElement("li");
         child.innerHTML = `<a href="#${current.id}" id="${current.id}__link" class="menu__link"> ${current.dataset.nav} </a>`;
