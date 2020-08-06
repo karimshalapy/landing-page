@@ -226,3 +226,17 @@ section.your-active-class .landing__container::after {
     background-color: #333;
     color: #fff 
 }
+/*Go To Top button*/
+#go-top:link, 
+#go-top:visited {
+    color: #fff;
+    position: fixed;
+    top: 90%;
+    right: 2%;
+    transition: ease 0.3s all;
+}
+#go-top:hover, 
+#go-top:active {
+    color: #b9b9b9;
+    transform: translateY(-3px);
+}

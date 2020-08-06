@@ -19,7 +19,8 @@
 */
 const DOMObj = {
     mainSections: Array.from(document.querySelectorAll("main section")),
-    navBarList: document.getElementById("navbar__list")
+    navBarList: document.getElementById("navbar__list"),
+    goTopBtn: document.getElementById("go-top")
 }
 let currentActiveSection;
 
@@ -75,17 +76,32 @@ const toggleActiveClass = el => {
 const scrollToSection = id => {
     let el;
     //iterate over the sections to get the section for the corresponding ID
-    for (const section of DOMObj.mainSections) {
-        if (section.id === id) {
-            el = section;
-            break
+    if (id) {
+        for (const section of DOMObj.mainSections) {
+            if (section.id === id) {
+                el = section;
+                break
+            }
         }
+        //using scrollTo method on window object
+        window.scrollTo({
+            top: el.offsetTop,
+            behavior: "smooth"
+        })
+    } else {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
     }
-    //using scrollTo method on window object
-    window.scrollTo({
-        top: el.offsetTop,
-        behavior: "smooth"
-    })
+}
+//TODO: show the go to top button 
+const toggleGoTopBtn = () => {
+    if (document.body.parentNode.scrollTop >= window.innerHeight) {
+        DOMObj.goTopBtn.style.visibility = "visible"
+    } else {
+        DOMObj.goTopBtn.style.visibility = "hidden"
+    }
 }
 /**
  * End Helper Functions
@@ -103,6 +119,7 @@ const main = e => {
     // Scroll to anchor ID using scrollTO event
     const id = window.location.hash.substr(1);
     scrollToSection(id);
+
 }
 
 
@@ -114,14 +131,21 @@ const main = e => {
 
 // Build menu
 document.addEventListener("DOMContentLoaded", main)
-// Scroll to section on link click
-DOMObj.navBarList.addEventListener("click", e => {
-    if (e.target.tagName === "A" || e.target.tagName === "LI") {
+// Scroll to section on link click and to top if clicked go to top button (used event delegation to lower the amount of listeners)
+document.addEventListener("click", e => {
+    if (e.target.tagName === "A") {
         e.preventDefault();
         const id = e.target.hash.substr(1)
         scrollToSection(id)
+    } else if (e.target.tagName === "I") {
+        e.preventDefault();
+        scrollToSection(0)
     }
 })
-// Set sections as active
-document.addEventListener("scroll", setActiveStatus)
+// Set sections as active and show the go to top button
+document.addEventListener("scroll", () => {
+    toggleGoTopBtn();
+    setActiveStatus();
+})
+
 
