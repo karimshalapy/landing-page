@@ -20,9 +20,11 @@
 const DOMObj = {
     mainSections: Array.from(document.querySelectorAll("main section")),
     navBarList: document.getElementById("navbar__list"),
-    goTopBtn: document.getElementById("go-top")
+    goTopBtn: document.getElementById("go-top"),
+    pageHeader: document.querySelector(".page__header")
 }
 let currentActiveSection;
+let timerOld;
 
 /**
  * End Global Variables
@@ -103,6 +105,19 @@ const toggleGoTopBtn = () => {
         DOMObj.goTopBtn.style.visibility = "hidden"
     }
 }
+//TODO: hide navbar after 3 seconds of no scrolling
+const hideNavbar = () => {
+    DOMObj.pageHeader.style.visibility = "visible";
+    const timer = setTimeout(() => {
+        DOMObj.pageHeader.style.visibility = "hidden";
+    }, 3000)
+    if (timerOld) clearTimeout(timerOld);
+    timerOld = timer;
+    if (document.body.parentNode.scrollTop <= 70) {
+        DOMObj.pageHeader.style.visibility = "visible";
+        clearTimeout(timerOld);
+    }
+}
 /**
  * End Helper Functions
  * Begin Main Functions
@@ -142,10 +157,11 @@ document.addEventListener("click", e => {
         scrollToSection(0)
     }
 })
-// Set sections as active and show the go to top button
+// when scrolling Set sections as active, show the go to top button, and hide navbar if no scrolling
 document.addEventListener("scroll", () => {
     toggleGoTopBtn();
     setActiveStatus();
+    hideNavbar();
 })
 
 
