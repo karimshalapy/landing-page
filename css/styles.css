@@ -87,7 +87,13 @@ section {
     color: #fff;
     transition: ease 0.3s all;
 }
-
+@media only screen and (max-width: 840px) {
+    .navbar__menu .menu__link {
+        font-size: .75em;
+        padding: 0.5em;
+        
+    }
+}
 /* Header Styles */
 .page__header {
     background: #fff;
