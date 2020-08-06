@@ -22,7 +22,7 @@ const DOMObj = {
     navBarList: document.getElementById("navbar__list"),
     goTopBtn: document.getElementById("go-top"),
     pageHeader: document.querySelector(".page__header")
-}
+};
 let currentActiveSection;
 let timerOld;
 
@@ -46,7 +46,7 @@ const navBuild = () => {
     }
     //append the fragment to the parent unordered list
     DOMObj.navBarList.appendChild(el);
-}
+};
 //TODO: check whether the section is in view or not
 const isInView = (el) => {
     const offsets = el.getBoundingClientRect();
@@ -60,20 +60,20 @@ const setActiveStatus = () => {
     }
     //loop over the sections to change the currentActiveSection
     for (const section of DOMObj.mainSections) {
-        if (isInView(section) && !(section === currentActiveSection)) {
+        if (isInView(section) && section !== currentActiveSection) {
             toggleActiveClass(currentActiveSection);
             currentActiveSection = section;
             toggleActiveClass(currentActiveSection);
-            return currentActiveSection
+            return currentActiveSection;
         }
     }
-}
+};
 //TODO: toggle the active class for navbar and sections
 const toggleActiveClass = el => {
-    el.classList.toggle("your-active-class")
-    const navId = `${el.id}__link`
-    document.getElementById(navId).classList.toggle("your-active-nav")
-}
+    el.classList.toggle("your-active-class");
+    const navId = `${el.id}__link`;
+    document.getElementById(navId).classList.toggle("your-active-nav");
+};
 //TODO: scroll to the desired section via ID
 const scrollToSection = id => {
     let el;
@@ -82,27 +82,27 @@ const scrollToSection = id => {
         for (const section of DOMObj.mainSections) {
             if (section.id === id) {
                 el = section;
-                break
+                break;
             }
         }
         //using scrollTo method on window object
         window.scrollTo({
             top: el.offsetTop,
             behavior: "smooth"
-        })
+        });
     } else {
         window.scrollTo({
             top: 0,
             behavior: "smooth"
-        })
+        });
     }
-}
+};
 //TODO: show the go to top button 
 const toggleGoTopBtn = () => {
     if (document.body.parentNode.scrollTop >= window.innerHeight) {
-        DOMObj.goTopBtn.style.visibility = "visible"
+        DOMObj.goTopBtn.style.visibility = "visible";
     } else {
-        DOMObj.goTopBtn.style.visibility = "hidden"
+        DOMObj.goTopBtn.style.visibility = "hidden";
     }
 }
 //TODO: hide navbar after 3 seconds of no scrolling
@@ -110,14 +110,14 @@ const hideNavbar = () => {
     DOMObj.pageHeader.style.visibility = "visible";
     const timer = setTimeout(() => {
         DOMObj.pageHeader.style.visibility = "hidden";
-    }, 3000)
+    }, 3000);
     if (timerOld) clearTimeout(timerOld);
     timerOld = timer;
     if (document.body.parentNode.scrollTop <= 70) {
         DOMObj.pageHeader.style.visibility = "visible";
         clearTimeout(timerOld);
     }
-}
+};
 /**
  * End Helper Functions
  * Begin Main Functions
@@ -135,7 +135,7 @@ const main = e => {
     const id = window.location.hash.substr(1);
     scrollToSection(id);
 
-}
+};
 
 
 /**
@@ -145,23 +145,21 @@ const main = e => {
 */
 
 // Build menu
-document.addEventListener("DOMContentLoaded", main)
+document.addEventListener("DOMContentLoaded", main);
 // Scroll to section on link click and to top if clicked go to top button (used event delegation to lower the amount of listeners)
 document.addEventListener("click", e => {
     if (e.target.tagName === "A") {
         e.preventDefault();
-        const id = e.target.hash.substr(1)
-        scrollToSection(id)
+        const id = e.target.hash.substr(1);
+        scrollToSection(id);
     } else if (e.target.tagName === "I") {
         e.preventDefault();
-        scrollToSection(0)
+        scrollToSection(0);
     }
-})
+});
 // when scrolling Set sections as active, show the go to top button, and hide navbar if no scrolling
 document.addEventListener("scroll", () => {
     toggleGoTopBtn();
     setActiveStatus();
     hideNavbar();
-})
-
-
+});
