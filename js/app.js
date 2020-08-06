@@ -37,7 +37,7 @@ const navBuild = () => {
     for (let current of DOMObj.mainSections) {
         //create the list item with the link inside it
         const child = document.createElement("li");
-        child.innerHTML = `<a href="#${current.id}" class="menu__link"> ${current.dataset.nav} </a>`;
+        child.innerHTML = `<a href="#${current.id}" id="${current.id}__link" class="menu__link"> ${current.dataset.nav} </a>`;
         //append the list item to the fragment
         el.appendChild(child);
     }
@@ -49,30 +49,39 @@ const isInView = (el) => {
     const offsets = el.getBoundingClientRect();
     return offsets.top <= window.innerHeight / 2 && offsets.bottom >= window.innerHeight / 2;
 }
-//TODO: change the active status among sections
+//TODO: change the active status for navbar and sections to iterate only one time
 const setActiveStatus = () => {
     if (!currentActiveSection) {
         currentActiveSection = DOMObj.mainSections[0]
-        currentActiveSection.classList.toggle("your-active-class")
+        toggleActiveClass(currentActiveSection);
     }
     //loop over the sections to change the currentActiveSection
     for (const section of DOMObj.mainSections) {
         if (isInView(section) && !(section === currentActiveSection)) {
-            currentActiveSection.classList.toggle("your-active-class")
+            toggleActiveClass(currentActiveSection);
             currentActiveSection = section;
-            currentActiveSection.classList.toggle("your-active-class")
+            toggleActiveClass(currentActiveSection);
             return currentActiveSection
         }
     }
 }
+//TODO: toggle the active class for navbar and sections
+const toggleActiveClass = el => {
+    el.classList.toggle("your-active-class")
+    const navId = `${el.id}__link`
+    document.getElementById(navId).classList.toggle("your-active-nav")
+}
+//TODO: scroll to the desired section via ID
 const scrollToSection = id => {
     let el;
+    //iterate over the sections to get the section for the corresponding ID
     for (const section of DOMObj.mainSections) {
         if (section.id === id) {
             el = section;
             break
         }
     }
+    //using scrollTo method on window object
     window.scrollTo({
         top: el.offsetTop,
         behavior: "smooth"

@@ -221,3 +221,8 @@ section.your-active-class .landing__container::after {
 		           rotate(-360deg);
 	}
 }
+/* Nav Active Styles */
+.navbar__menu .your-active-nav {
+    background-color: #333;
+    color: #fff 
+}
