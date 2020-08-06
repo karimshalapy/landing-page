@@ -29,7 +29,7 @@ let currentActiveSection;
  * 
 */
 //TODO: create the navbar depending on the sections available on page
-function navBuild() {
+const navBuild = () => {
 
     //creating a document fragment for better 
     const el = document.createDocumentFragment();
@@ -45,12 +45,12 @@ function navBuild() {
     DOMObj.navBarList.appendChild(el);
 }
 //TODO: check whether the section is in view or not
-function isInView(el) {
+const isInView = (el) => {
     const offsets = el.getBoundingClientRect();
     return offsets.top <= window.innerHeight / 2 && offsets.bottom >= window.innerHeight / 2;
 }
 //TODO: change the active status among sections
-function setActiveStatus() {
+const setActiveStatus = () => {
     if (!currentActiveSection) {
         currentActiveSection = DOMObj.mainSections[0]
         currentActiveSection.classList.toggle("your-active-class")
@@ -65,7 +65,7 @@ function setActiveStatus() {
         }
     }
 }
-function scrollToSection(id) {
+const scrollToSection = id => {
     let el;
     for (const section of DOMObj.mainSections) {
         if (section.id === id) {
@@ -83,7 +83,7 @@ function scrollToSection(id) {
  * Begin Main Functions
  * 
 */
-function main(e) {
+const main = e => {
     e.preventDefault();
     // build the nav
     navBuild();
@@ -106,7 +106,7 @@ function main(e) {
 // Build menu
 document.addEventListener("DOMContentLoaded", main)
 // Scroll to section on link click
-DOMObj.navBarList.addEventListener("click", (e) => {
+DOMObj.navBarList.addEventListener("click", e => {
     if (e.target.tagName === "A" || e.target.tagName === "LI") {
         e.preventDefault();
         const id = e.target.hash.substr(1)
